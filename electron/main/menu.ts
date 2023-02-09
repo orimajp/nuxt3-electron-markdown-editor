@@ -1,3 +1,4 @@
+// https://www.electronjs.org/ja/docs/latest/api/menu
 import { app, Menu } from 'electron'
 
 const isMac = process.platform === 'darwin'
@@ -22,15 +23,24 @@ const template = [
   {
     label: 'File',
     submenu: [
-      { label: 'New Window', click: () => {
-        createWindow()
-      }},
-      { label: 'Open', click: () => {
-        openFile()
-      }},
-      { label: 'Save', click: () => {
-        saveFile()
-      }},
+      { label: 'New',
+        accelerator: process.platform === 'darwin' ? 'Cmd+N' : 'Ctrl+N',
+        click: () => {
+          createWindow()
+        },
+      },
+      { label: 'Open',
+        accelerator: process.platform === 'darwin' ? 'Cmd+O' : 'Ctrl+O',
+        click: () => {
+          openFile()
+        }
+      },
+      { label: 'Save',
+        accelerator: process.platform === 'darwin' ? 'Cmd+S' : 'Ctrl+S',
+        click: () => {
+          saveFile()
+        }
+      },
       { type: 'separator' },
       isMac ? { role: 'close' } : { role: 'quit' }
     ]
