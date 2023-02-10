@@ -8,7 +8,7 @@ export interface IElectronAPI {
   handleReadFle: (callback: (event: IpcRendererEvent, value: FileData) => void) => () => void,
   handleGetData: (callback: (event: IpcRendererEvent) => void ) => () => void,
   handleSendWriteResult:(callback: (event: IpcRendererEvent, value: WriteResult | void) => void) => () => void
-
+  isProdMode: () => Promise<boolean>
 
 
 }

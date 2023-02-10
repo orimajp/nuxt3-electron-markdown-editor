@@ -11,9 +11,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   handleGetData: (callback: any) => ipcRenderer.on('get-data', callback),
 
-  handleSendWriteResult: (callback: any) => ipcRenderer.on('write-result', callback)
+  handleSendWriteResult: (callback: any) => ipcRenderer.on('write-result', callback),
 
-
+  isProdMode: () => ipcRenderer.invoke('prod-mode'),
 
 
 

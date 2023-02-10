@@ -1,6 +1,6 @@
 // https://gitlab.com/nikosdendrinos/electron-nuxt3-boilerplate/-/blob/main/electron/main/index.ts
 // https://github.com/ics-creative/150819_electron_text_editor/blob/maiin/src/main.js
-import { app, BrowserWindow, ipcMain, dialog } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, globalShortcut } from 'electron'
 import path from 'path'
 import fs from 'fs'
 import { createMenu } from './menu'
@@ -27,6 +27,7 @@ const preload = path.join(process.env.DIST, 'preload.js')
 
 const bootstrap = () => {
   const win = new BrowserWindow({
+    titleBarStyle: "hidden", 
     width: 800,
     height: 540,
     webPreferences: {
@@ -71,6 +72,18 @@ createMenu(createWindowFunc ,openFileFunc, saveFileFunc)
 app.whenReady().then(() => {
   bootstrap()
 
+  /*
+  if (!process.env.VITE_DEV_SERVER_URL) {
+    const ret = globalShortcut.register('CommandOrControl+R', () => {
+      console.log('CommandOrControl+R is pressed')
+    })
+  
+    if (!ret) {
+      console.log('registration failed')
+    }
+  }
+  */
+
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) bootstrap()
   })
@@ -78,6 +91,10 @@ app.whenReady().then(() => {
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
+})
+
+ipcMain.handle('prod-mode', () => {
+  return !process.env.VITE_DEV_SERVER_URL
 })
 
 ipcMain.on('write-data', async (event, value) => {
