@@ -33,8 +33,8 @@ const displayDocumentTitle = computed(() => isDirty.value ? `(*) ${documentTitle
 
 <template>
   <v-app-bar
-  density="compact"
-   class="text-grey-darken-1"
+    density="compact"
+    class="text-grey-darken-1 navbar-area"
   >
   <v-app-bar-title
       class="title"
@@ -82,12 +82,16 @@ const displayDocumentTitle = computed(() => isDirty.value ? `(*) ${documentTitle
 </template>
 
 <style scoped>
-
+.navbar-area {
+  -webkit-app-region: drag
+}
 .title {
   font-size: 90%;
+  margin-left: 80px;
   margin-right: 16px;
 }
 .button-group {
   margin-right: 8px;
+  -webkit-app-region: no-drag;
 }
 </style>
