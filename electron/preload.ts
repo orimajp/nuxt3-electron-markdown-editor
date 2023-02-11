@@ -15,6 +15,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   isProdMode: () => ipcRenderer.invoke('prod-mode'),
 
+  closeConfirm: () => ipcRenderer.invoke('close-confirm'),
 
+  closeWindow: () => ipcRenderer.invoke('window-close'),
 
 })

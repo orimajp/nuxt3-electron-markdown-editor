@@ -25,6 +25,15 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 
 const preload = path.join(process.env.DIST, 'preload.js')
 
+// https://teratail.com/questions/189438
+const option = {
+  type: "warning",
+  buttons: ["キャンセル", "終了する"],
+  defaultId: 0,
+  title: "閉じるボタンが押されました",
+  message: "ファイルは保存しましたか？していなければキャンセルを押して下さい。"
+}
+
 const bootstrap = () => {
   const win = new BrowserWindow({
     titleBarStyle: "hidden", 
@@ -41,6 +50,14 @@ const bootstrap = () => {
   } else {
     win.loadFile(path.join(process.env.VITE_PUBLIC!, 'index.html'))
   }
+
+  win.on('close', (e) => {
+    const num = dialog.showMessageBoxSync(option)
+    if (num === 0) {
+      e.preventDefault()
+    }
+  })
+
 }
 
 const createWindowFunc = () => {
@@ -95,6 +112,21 @@ app.on('window-all-closed', () => {
 
 ipcMain.handle('prod-mode', () => {
   return !process.env.VITE_DEV_SERVER_URL
+})
+
+ipcMain.handle('close-confirm', () => {
+  const num = dialog.showMessageBoxSync(option)
+  /*
+  if (num !== 0) {
+    const win = BrowserWindow.getFocusedWindow() as BrowserWindow
+    win.close()
+  }*/
+  return num
+})
+
+ipcMain.handle('window-close', () => {
+  const win = BrowserWindow.getFocusedWindow() as BrowserWindow
+  win.close()
 })
 
 ipcMain.on('write-data', async (event, value) => {
