@@ -107,6 +107,7 @@ const initMonaco = async () => {
     language: 'markdown',
     theme: props.theme,
     wordWrap: 'on',
+    occurrencesHighlight: false,
   })
 
   if (editor) {
