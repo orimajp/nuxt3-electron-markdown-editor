@@ -9,6 +9,7 @@ const {
 } = useContentVersion()
 
 window.electronAPI.handleReadFle((event, value) => {
+  if (!value) return
   console.log(value)
   documentTitle.value = value.fileName
   filePath.value = value.filePath
