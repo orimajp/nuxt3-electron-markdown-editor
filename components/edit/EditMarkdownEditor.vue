@@ -31,9 +31,14 @@ const styleWidth = computed(() => `${props.width}px`)
 const styleHeight = computed(() => `${props.height}px`)
 
 const {
+  isDirty,
   initilizeVersionId,
   updateCurrentVersionId,
 } = useContentVersion()
+
+const {
+  initDirtyStete
+} = useNofityDirtyState(isDirty)
 
 watch(
   () => props.editData,
@@ -44,7 +49,6 @@ watch(
     }
   }
 )
-
 
 watch(
   () => [props.width, props.height],
@@ -110,6 +114,7 @@ const initMonaco = async () => {
     const versionId = getVersionId()
     if (versionId) {
       initilizeVersionId(versionId)
+      initDirtyStete()
     }
     editor.onDidChangeModelContent((event) => {
       const value = editor.getValue()
@@ -119,7 +124,6 @@ const initMonaco = async () => {
       }
     })
   }
-
 
   emit('editorDidMount', editor)
 }

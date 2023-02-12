@@ -9,8 +9,7 @@ export interface IElectronAPI {
   handleGetData: (callback: (event: IpcRendererEvent) => void ) => () => void,
   handleSendWriteResult:(callback: (event: IpcRendererEvent, value: WriteResult | void) => void) => () => void
   isProdMode: () => Promise<boolean>
-  closeConfirm: () => number
-  closeWindow: () => void
+  noticeDirty: (dirty: boolean) => void
 }
 
 declare global {

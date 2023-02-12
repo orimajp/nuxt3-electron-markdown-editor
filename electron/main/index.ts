@@ -25,6 +25,8 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 
 const preload = path.join(process.env.DIST, 'preload.js')
 
+const dirtyMap = new Map<BrowserWindow, boolean>()
+
 // https://teratail.com/questions/189438
 const option = {
   type: "warning",
@@ -44,6 +46,15 @@ const bootstrap = () => {
     }
   })
 
+  ipcMain.on('notice-dirty', (event, dirty) => {
+    const webContents = event.sender
+    const win = BrowserWindow.fromWebContents(webContents)
+    if (win) {
+//      console.log('notice-dirty state=' + dirty)
+      dirtyMap.set(win, dirty)
+    }
+  })
+
   if (process.env.VITE_DEV_SERVER_URL) {
     win.loadURL(process.env.VITE_DEV_SERVER_URL)
     win.webContents.openDevTools()
@@ -52,12 +63,21 @@ const bootstrap = () => {
   }
 
   win.on('close', (e) => {
+    //@ts-ignore
+    const win = e.sender
+    const dirty = dirtyMap.get(win)
+//    console.log('close dirty state=' + dirty)
+    if (process.env.VITE_DEV_SERVER_URL || !dirty) {
+      dirtyMap.delete(win)
+      return
+    }
     const num = dialog.showMessageBoxSync(option)
     if (num === 0) {
       e.preventDefault()
+    } else {
+      dirtyMap.delete(win)
     }
   })
-
 }
 
 const createWindowFunc = () => {
@@ -89,18 +109,6 @@ createMenu(createWindowFunc ,openFileFunc, saveFileFunc)
 app.whenReady().then(() => {
   bootstrap()
 
-  /*
-  if (!process.env.VITE_DEV_SERVER_URL) {
-    const ret = globalShortcut.register('CommandOrControl+R', () => {
-      console.log('CommandOrControl+R is pressed')
-    })
-  
-    if (!ret) {
-      console.log('registration failed')
-    }
-  }
-  */
-
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) bootstrap()
   })
@@ -112,21 +120,6 @@ app.on('window-all-closed', () => {
 
 ipcMain.handle('prod-mode', () => {
   return !process.env.VITE_DEV_SERVER_URL
-})
-
-ipcMain.handle('close-confirm', () => {
-  const num = dialog.showMessageBoxSync(option)
-  /*
-  if (num !== 0) {
-    const win = BrowserWindow.getFocusedWindow() as BrowserWindow
-    win.close()
-  }*/
-  return num
-})
-
-ipcMain.handle('window-close', () => {
-  const win = BrowserWindow.getFocusedWindow() as BrowserWindow
-  win.close()
 })
 
 ipcMain.on('write-data', async (event, value) => {

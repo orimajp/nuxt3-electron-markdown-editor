@@ -13,10 +13,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   handleSendWriteResult: (callback: any) => ipcRenderer.on('write-result', callback),
 
+  noticeDirty: (dirty: boolean) => ipcRenderer.send('notice-dirty', dirty),
+
   isProdMode: () => ipcRenderer.invoke('prod-mode'),
-
-  closeConfirm: () => ipcRenderer.invoke('close-confirm'),
-
-  closeWindow: () => ipcRenderer.invoke('window-close'),
 
 })
