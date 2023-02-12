@@ -50,7 +50,6 @@ const bootstrap = () => {
     const webContents = event.sender
     const win = BrowserWindow.fromWebContents(webContents)
     if (win) {
-//      console.log('notice-dirty state=' + dirty)
       dirtyMap.set(win, dirty)
     }
   })
@@ -66,7 +65,6 @@ const bootstrap = () => {
     //@ts-ignore
     const win = e.sender
     const dirty = dirtyMap.get(win)
-//    console.log('close dirty state=' + dirty)
     if (process.env.VITE_DEV_SERVER_URL || !dirty) {
       dirtyMap.delete(win)
       return
@@ -88,19 +86,16 @@ const createWindowFunc = () => {
 const openFileFunc = async () => {
   console.log('openFile menu click')
   const result = await openFile()
-//  console.log(result)
-
   const win = BrowserWindow.getFocusedWindow() as BrowserWindow
   win.webContents.send('read-file', result)
 }
 
 const saveFileFunc = () => {
   console.log('saveFile menu click')
-//  saveFile()
-  const win = BrowserWindow.getFocusedWindow() as BrowserWindow
 
   // TODO 書き込み処理(非同期が絡むとシーケンシャルな処理にはならない可能性がある)
   // * レンダープロセスにデータ取得依頼
+  const win = BrowserWindow.getFocusedWindow() as BrowserWindow
   win.webContents.send('get-data')
 }
 

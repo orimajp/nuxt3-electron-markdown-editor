@@ -5,7 +5,6 @@ import { FileData } from '~~/models/FileData'
 import { WriteFile } from '~~/models/WriteFile'
 import { WriteResult } from '~~/models/WriteResult'
 
-//export const openFile = async (): Promise<null | { textData: string, filePath: string }> => {
 export const openFile = async (): Promise<null | FileData> => {
   const win = BrowserWindow.getFocusedWindow() as BrowserWindow
 
@@ -18,7 +17,6 @@ export const openFile = async (): Promise<null | FileData> => {
         {
           name: "Documents",
           // 読み込み可能な拡張子を指定
-//          extensions: ["txt", "html", "md", "js", "ts"],
           extensions: ["md"],
         },
       ],
@@ -41,10 +39,6 @@ export const openFile = async (): Promise<null | FileData> => {
       fileData: textData,
     }
 
-//    return {
-//      filePath,
-//      textData,
-//    }
     return readFile
   }
 

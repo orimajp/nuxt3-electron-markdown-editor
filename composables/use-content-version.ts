@@ -17,7 +17,6 @@ export const useContentVersion = () => {
     debug()
   }
 
-//  const isDirty = () => _originalVersionId.value !== _currentVersioId.value
   const isDirty = computed(() => _originalVersionId.value !== _currentVersioId.value)
 
   const updateCurrentVersionId = (versionId: number) => {
