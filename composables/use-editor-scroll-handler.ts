@@ -17,10 +17,15 @@ export const useEditorScrollHandler = (
     updateViewerScrollPosition,
   } = useContentScrollPosition()
 
+  const {
+    scrollDelay,
+  } = useScrollDelay()
+
   const handleScroll = () => {
     if (!editor) return
     if (!isEnableScrollSync.value) return
     if (isScrollRecieved) return
+    if (scrollDelay.value) return
     const scrollTop = editor.getScrollTop()
     const topEnd = editor.getScrollHeight() - windowHeight.value
     if (topEnd > 0){

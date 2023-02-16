@@ -10,12 +10,19 @@ export const useViewerScrollHandler = (
     viewerScrollPosition,
     updateEditorScrollPosition,
   } = useContentScrollPosition()
+
+  const {
+    scrollDelay,
+  } = useScrollDelay()
+
   const handleScroll = (e: Event) => {
     if (!isEnableScrollSync.value) return
     if (isScrollRecieved) return
+    if (scrollDelay.value) return
     const el = e.target as Element
     if (el && el.clientHeight && el.scrollHeight) {
       const topEnd = el.scrollHeight - el.clientHeight
+      console.log(`el.scrollTop=${el.scrollTop}, el.scrollHeight=${el.scrollHeight}, el.clientHeight=${el.clientHeight} `)
       if (topEnd > 0) {
         nextTick(() => {
           updateEditorScrollPosition(el.scrollTop / topEnd)

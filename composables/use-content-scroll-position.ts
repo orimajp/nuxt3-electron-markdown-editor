@@ -23,6 +23,14 @@ export const useContentScrollPosition = () => {
     _editorScrollPosition.value > 1 ? 1 : _editorScrollPosition.value
   )
 
+  /*
+  watch(
+    () => [_viewerScrollPosition.value, _editorScrollPosition.value],
+    ([nvp, nep], [ovp, oep]) => {
+      console.log(`new viewwer pos=${nvp}, editor pos=${nep} / old viewer pos=${ovp}, editor pos=${oep}`)
+    }
+  )*/
+
   return {
     initializeScrollPosition,
     updateEditorScrollPosition,

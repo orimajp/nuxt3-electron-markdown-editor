@@ -26,6 +26,15 @@ const {
   editorWidth,
 } = useEditorWidth(splitMode)
 
+const {
+  changeDelayState,
+} = useScrollDelay()
+
+watch(
+  () => splitMode.value,
+  () => changeDelayState()
+)
+
 const isEnableScrollSync = computed(() => syncMode.value.length > 0)
 const editorWidthRatio = computed(() => `${editorWidth.value}%`)
 const previewerWidthRatio = computed(() => `${100 - editorWidth.value}%`)
