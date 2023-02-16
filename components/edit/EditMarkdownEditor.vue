@@ -108,6 +108,7 @@ const initMonaco = async () => {
     theme: props.theme,
     wordWrap: 'on',
     occurrencesHighlight: false,
+    quickSuggestions: false,
   })
 
   if (editor) {
